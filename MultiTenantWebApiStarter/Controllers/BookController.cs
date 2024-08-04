@@ -9,24 +9,17 @@ namespace MultiTenantWebApiStarter.Controllers
     [Route("[controller]")]
     public class BookController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
-        private readonly ITenantResolver _tenantResolver;
+        private readonly NHibernate.ISession _session;
 
-        public BookController(IConfiguration configuration, ITenantResolver tenantResolver)
+        public BookController(NHibernate.ISession session)
         {
-            this._configuration = configuration;
-            this._tenantResolver = tenantResolver;
+            this._session = session;
         }
 
         [HttpGet]
         public IEnumerable<Book> GetBooks()
         {
-            string tenant = this._tenantResolver.GetTenant();
-
-            string tenantConnectionString = _configuration.GetConnectionString(tenant);
-
-            using NHibernate.ISession session = NHibernateHelper.GetSession(tenantConnectionString);
-            return session.Query<Book>().ToList();
+            return this._session.Query<Book>().ToList();
         }
     }
 }
