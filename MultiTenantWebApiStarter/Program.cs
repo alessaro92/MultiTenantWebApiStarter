@@ -1,3 +1,4 @@
+using MultiTenantWebApiStarter.Swagger;
 using MultiTenantWebApiStarter.Tenant;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,7 @@ builder.Services.AddNHibernate();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(o => o.OperationFilter<TenantHeaderFilter>());
 
 var app = builder.Build();
 

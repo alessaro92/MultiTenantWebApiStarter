@@ -2,7 +2,7 @@
 {
     public class HttpHeaderTenantResolver : ITenantResolver
     {
-        private const string TenantHeaderName = "tenant";
+        public const string TenantHeaderName = "tenant";
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
