@@ -13,7 +13,7 @@ namespace MultiTenantWebApiStarter.Helpers
 {
     public class NHibernateHelper
     {
-        public static NHibernate.ISession GetSession(string connectionString)
+        public static ISessionFactory GetSessionFactory(string connectionString)
         {
             var nhCfg = new Configuration();
             nhCfg.SetProperty(Environment.ConnectionProvider, typeof(DriverConnectionProvider).AssemblyQualifiedName);
@@ -35,7 +35,7 @@ namespace MultiTenantWebApiStarter.Helpers
 
             ISessionFactory sessionFactory = nhBuiltCfg.BuildSessionFactory();
 
-            return sessionFactory.OpenSession();
+            return sessionFactory;
         }
     }
 }

@@ -1,5 +1,7 @@
 using MultiTenantWebApiStarter.Helpers;
+using MultiTenantWebApiStarter.Manager;
 using MultiTenantWebApiStarter.Tenant;
+using NHibernate;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -8,17 +10,12 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddNHibernate(
              this IServiceCollection services)
         {
+            services.AddSingleton<ISessionFactoryManager, SessionFactoryManager>();
             services.AddScoped(sp =>
             {
-                var configuration = sp.GetRequiredService<IConfiguration>();
-                var tenantResolver = sp.GetRequiredService<ITenantResolver>();
-
-                string tenant = tenantResolver.GetTenant();
-
-                string tenantConnectionString = configuration.GetConnectionString(tenant);
-
-                NHibernate.ISession session = NHibernateHelper.GetSession(tenantConnectionString);
-
+                var sessionFactoryManager = sp.GetRequiredService<ISessionFactoryManager>();
+                ISessionFactory sessionFactory = sessionFactoryManager.GetSessionFactory();
+                NHibernate.ISession session = sessionFactory.OpenSession();
                 return session;
             });
 
