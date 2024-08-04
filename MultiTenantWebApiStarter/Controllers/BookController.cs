@@ -21,5 +21,12 @@ namespace MultiTenantWebApiStarter.Controllers
         {
             return this._session.Query<Book>().ToList();
         }
+
+        [HttpPut]
+        public void AddBook(Book book)
+        {
+            this._session.Save(book);
+            this._session.Flush();
+        }
     }
 }
