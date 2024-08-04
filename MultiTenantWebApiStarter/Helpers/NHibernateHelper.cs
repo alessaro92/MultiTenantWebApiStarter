@@ -13,10 +13,8 @@ namespace MultiTenantWebApiStarter.Helpers
 {
     public class NHibernateHelper
     {
-        public static NHibernate.ISession GetSession()
+        public static NHibernate.ISession GetSession(string connectionString)
         {
-            string connectionString = "Host=localhost;Username=postgres;Password=postgres;Database=tenant_a";
-
             var nhCfg = new Configuration();
             nhCfg.SetProperty(Environment.ConnectionProvider, typeof(DriverConnectionProvider).AssemblyQualifiedName);
             nhCfg.SetProperty(Environment.Dialect, typeof(PostgreSQLDialect).AssemblyQualifiedName);

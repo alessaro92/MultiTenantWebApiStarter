@@ -8,10 +8,21 @@ namespace MultiTenantWebApiStarter.Controllers
     [Route("[controller]")]
     public class BookController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
+
+        public BookController(IConfiguration configuration)
+        {
+            this._configuration = configuration;
+        }
+
         [HttpGet]
         public IEnumerable<Book> GetBooks()
         {
-            using NHibernate.ISession session = NHibernateHelper.GetSession();
+            string tenant = this.HttpContext.Request.Headers["tenant"].SingleOrDefault();
+
+            string tenantConnectionString = _configuration.GetConnectionString(tenant);
+
+            using NHibernate.ISession session = NHibernateHelper.GetSession(tenantConnectionString);
             return session.Query<Book>().ToList();
         }
     }
